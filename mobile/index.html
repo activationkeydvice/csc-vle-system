@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CSC VLE Services - Mobile</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            padding-bottom: 70px;
+        }
+        .app-header {
+            background: linear-gradient(135deg, #1a73e8, #1557b0);
+            color: white;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .app-header .brand {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .app-header .brand i {
+            font-size: 24px;
+        }
+        .app-header .user-badge {
+            font-size: 12px;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        .bottom-nav .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            color: #9aa0a6;
+            text-decoration: none;
+            padding: 4px 12px;
+            transition: all 0.3s;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .bottom-nav .nav-item i {
+            font-size: 22px;
+            margin-bottom: 2px;
+        }
+        .bottom-nav .nav-item.active {
+            color: #1a73e8;
+        }
+        .bottom-nav .nav-item .badge {
+            position: absolute;
+            top: -2px;
+            right: -6px;
+            font-size: 9px;
+            padding: 2px 6px;
+        }
+        .bottom-nav .nav-item {
+            position: relative;
+        }
+        .page {
+            display: none;
+            padding: 15px 15px 80px 15px;
+            animation: fadeIn 0.3s ease;
+        }
+        .page.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .stat-card .stat-icon {
+            font-size: 28px;
+            color: #1a73e8;
+            margin-bottom: 5px;
+        }
+        .stat-card .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #202124;
+        }
+        .stat-card .stat-label {
+            font-size: 12px;
+            color: #5f6368;
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 15px;
+        }
+        .card-header {
+            background: white;
+            border-bottom: 1px solid #f1f3f4;
+            padding: 12px 15px;
+            border-radius: 12px 12px 0 0;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .list-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f1f3f4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .list-item:last-child {
+            border-bottom: none;
+        }
+        .list-item .title {
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .list-item .subtitle {
+            font-size: 12px;
+            color: #5f6368;
+        }
+        .badge-status {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        .badge-active { background: #e6f4ea; color: #1e7e34; }
+        .badge-inactive { background: #fce8e6; color: #d93025; }
+        .badge-pending { background: #fef7e0; color: #e37400; }
+        .badge-approved { background: #e6f4ea; color: #1e7e34; }
+        .badge-completed { background: #e8f0fe; color: #1a73e8; }
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        .login-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px 25px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .login-card .logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .login-card .logo i {
+            font-size: 40px;
+            color: #1a73e8;
+            background: #e8f0fe;
+            padding: 15px;
+            border-radius: 50%;
+        }
+        .login-card h4 {
+            text-align: center;
+            font-weight: 700;
+        }
+        .login-card p {
+            text-align: center;
+            color: #5f6368;
+            font-size: 13px;
+        }
+        .form-control {
+            border-radius: 10px;
+            padding: 12px 15px;
+            border: 2px solid #e8eaed;
+            font-size: 14px;
+        }
+        .form-control:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 0.2rem rgba(26,115,232,0.25);
+        }
+        .btn-primary {
+            background: #1a73e8;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: 600;
+            width: 100%;
+        }
+        .btn-primary:active {
+            background: #1557b0;
+        }
+        .real-time-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #34a853;
+            animation: pulse 1.5s ease-in-out infinite;
+            margin-right: 6px;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        .toast-container {
+            position: fixed;
+            top: 60px;
+            left: 15px;
+            right: 15px;
+            z-index: 9999;
+        }
+        .toast-custom {
+            background: white;
+            border-radius: 10px;
+            padding: 12px 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            margin-bottom: 8px;
+            font-size: 14px;
+            border-left: 4px solid #1a73e8;
+            animation: slideDown 0.3s ease;
+        }
+        .toast-custom.success { border-left-color: #34a853; }
+        .toast-custom.error { border-left-color: #ea4335; }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9998;
+        }
+        .loading-overlay.show {
+            display: flex;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e8eaed;
+            border-top-color: #1a73e8;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .floating-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(26,115,232,0.4);
+            font-size: 24px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            transition: transform 0.3s;
+        }
+        .floating-btn:active {
+            transform: scale(0.9);
+        }
+        .floating-btn.show {
+            display: flex;
+        }
+        .service-card-mini {
+            background: white;
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            border-left: 3px solid #1a73e8;
+        }
+        .service-card-mini .name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .service-card-mini .price {
+            color: #34a853;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .service-card-mini .meta {
+            font-size: 11px;
+            color: #5f6368;
+        }
+        .modal-content {
+            border-radius: 16px;
+        }
+        .modal-header {
+            border-bottom: 1px solid #f1f3f4;
+            padding: 15px 20px;
+        }
+        .modal-body {
+            padding: 20px;
+        }
+        .modal-footer {
+            border-top: 1px solid #f1f3f4;
+            padding: 12px 20px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #5f6368;
+        }
+        .empty-state i {
+            font-size: 48px;
+            color: #dadce0;
+            margin-bottom: 15px;
+        }
+        .profile-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #1a73e8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 auto 15px;
+        }
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .quick-action {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 5px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: none;
+            font-size: 11px;
+            color: #202124;
+            transition: transform 0.2s;
+        }
+        .quick-action:active {
+            transform: scale(0.95);
+        }
+        .quick-action i {
+            font-size: 24px;
+            color: #1a73e8;
+            display: block;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Login Screen -->
+<div id="loginScreen" class="login-container">
+    <div class="login-card">
+        <div class="logo">
+            <i class="fas fa-crown"></i>
+            <h4 class="mt-2">CSC VLE Services</h4>
+            <p>Management System</p>
+        </div>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" id="loginUsername" class="form-control" required placeholder="Enter username">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" id="loginPassword" class="form-control" required placeholder="Enter password">
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt me-2"></i>Login
+            </button>
+        </form>
+        <div class="text-center mt-3">
+            <small class="text-muted">Demo: admin/admin123 or vle/vle123</small>
+        </div>
+    </div>
+</div>
+
+<!-- Main App -->
+<div id="app" style="display:none;">
+
+    <!-- Header -->
+    <div class="app-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="brand">
+                <i class="fas fa-crown"></i>
+                <span>CSC VLE</span>
+                <span class="real-time-indicator"></span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span class="user-badge" id="userRoleBadge">VLE</span>
+                <button class="btn btn-sm btn-outline-light" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pages -->
+    <div id="pageDashboard" class="page active">
+        <div class="row g-2" id="statsGrid">
+            <div class="col-6">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-cogs"></i></div>
+                    <div class="stat-number" id="statServices">0</div>
+                    <div class="stat-label">Services</div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
+                    <div class="stat-number" id="statApplications">0</div>
+                    <div class="stat-label">Applications</div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-number" id="statPending">0</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+                    <div class="stat-number" id="statCollection">₹0</div>
+                    <div class="stat-label">Collection</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <button class="quick-action" onclick="navigateTo('services')">
+                <i class="fas fa-cogs"></i> Services
+            </button>
+            <button class="quick-action" onclick="showAddApplication()">
+                <i class="fas fa-plus-circle"></i> New App
+            </button>
+            <button class="quick-action" onclick="navigateTo('applications')">
+                <i class="fas fa-file-alt"></i> My Apps
+            </button>
+            <button class="quick-action" onclick="navigateTo('notifications')">
+                <i class="fas fa-bell"></i> Alerts
+                <span class="badge bg-danger" id="notifBadge">0</span>
+            </button>
+        </div>
+
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Recent Applications</span>
+                <button class="btn btn-sm btn-primary" onclick="refreshData()">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+            <div id="recentAppsList">
+                <div class="list-item text-center text-muted">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pageServices" class="page">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Services</h5>
+            <span class="text-muted small" id="serviceCount">0 available</span>
+        </div>
+        <div id="servicesList">
+            <div class="text-center text-muted py-4">Loading...</div>
+        </div>
+    </div>
+
+    <div id="pageApplications" class="page">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Applications</h5>
+            <button class="btn btn-sm btn-primary" onclick="showAddApplication()">
+                <i class="fas fa-plus"></i> New
+            </button>
+        </div>
+        <div id="applicationsList">
+            <div class="text-center text-muted py-4">Loading...</div>
+        </div>
+    </div>
+
+    <div id="pageNotifications" class="page">
+        <h5 class="mb-3">Notifications</h5>
+        <div id="notificationsList">
+            <div class="text-center text-muted py-4">Loading...</div>
+        </div>
+    </div>
+
+    <div id="pageProfile" class="page">
+        <div class="text-center mb-4">
+            <div class="profile-avatar" id="profileAvatar">U</div>
+            <h5 id="profileName">User</h5>
+            <span class="badge bg-primary" id="profileRole">VLE</span>
+            <p class="text-muted small" id="profileUsername">@username</p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="list-item">
+                    <span class="text-muted">Status</span>
+                    <span id="profileStatus">Active</span>
+                </div>
+                <div class="list-item">
+                    <span class="text-muted">Joined</span>
+                    <span id="profileJoined">N/A</span>
+                </div>
+                <div class="list-item">
+                    <span class="text-muted">Total Applications</span>
+                    <span id="profileTotalApps">0</span>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-danger w-100 mt-3" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt me-2"></i>Logout
+        </button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="navigateTo('dashboard')">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" onclick="navigateTo('services')">
+            <i class="fas fa-cogs"></i>
+            <span>Services</span>
+        </button>
+        <button class="nav-item" onclick="navigateTo('applications')">
+            <i class="fas fa-file-alt"></i>
+            <span>Apps</span>
+        </button>
+        <button class="nav-item" onclick="navigateTo('notifications')">
+            <i class="fas fa-bell"></i>
+            <span>Alerts</span>
+            <span class="badge bg-danger" id="notifBadgeNav">0</span>
+        </button>
+        <button class="nav-item" onclick="navigateTo('profile')">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </button>
+    </nav>
+
+    <!-- Floating Action Button -->
+    <button class="floating-btn" id="fabBtn" onclick="showAddApplication()">
+        <i class="fas fa-plus"></i>
+    </button>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Add Application Modal -->
+<div class="modal fade" id="addAppModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title"><i class="fas fa-file-medical me-2"></i>New Application</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addAppForm">
+                    <div class="mb-2">
+                        <label class="form-label small">Customer Name *</label>
+                        <input type="text" name="customerName" class="form-control" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small">Mobile Number *</label>
+                        <input type="text" name="customerMobile" class="form-control" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small">Address</label>
+                        <input type="text" name="customerAddress" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small">Service *</label>
+                        <select name="serviceId" class="form-control" required>
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small">Remarks</label>
+                        <input type="text" name="remarks" class="form-control">
+                    </div>
+                    <input type="hidden" name="customerId" value="">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="submitApplication()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
+<script>
+// Firebase Config - Same as web app
+const firebaseConfig = {
+    apiKey: "YOUR_FIREBASE_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+    projectId: "YOUR_PROJECT",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// App state
+let currentUser = null;
+let currentPage = 'dashboard';
+let isAdmin = false;
+
+// Toast function
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast-custom ${type}`;
+    toast.innerHTML = `
+        <div class="d-flex align-items-center">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'} me-2"></i>
+            <span>${message}</span>
+            <button type="button" class="btn-close ms-auto" onclick="this.parentElement.parentElement.remove()"></button>
+        </div>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+}
+
+// Loading overlay
+function showLoading(show) {
+    document.getElementById('loadingOverlay').classList.toggle('show', show);
+}
+
+// API call
+function apiCall(action, data = {}) {
+    return new Promise((resolve, reject) => {
+        showLoading(true);
+        fetch(`https://YOUR_WEB_APP_URL/index.php?action=${action}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(result => {
+            showLoading(false);
+            if (result.error) {
+                showToast(result.error, 'error');
+                reject(result);
+            } else {
+                resolve(result);
+            }
+        })
+        .catch(err => {
+            showLoading(false);
+            showToast('Network error', 'error');
+            reject(err);
+        });
+    });
+}
+
+// Handle Login
+function handleLogin(event) {
+    event.preventDefault();
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    showLoading(true);
+    // Try to authenticate via Firebase REST
+    const usersRef = database.ref('users');
+    usersRef.orderByChild('username').equalTo(username).once('value')
+        .then(snapshot => {
+            showLoading(false);
+            const data = snapshot.val();
+            if (data) {
+                let found = false;
+                Object.entries(data).forEach(([id, user]) => {
+                    if (user.password === md5(password)) {
+                        found = true;
+                        currentUser = { id, ...user };
+                        isAdmin = user.role === 'admin';
+                        document.getElementById('loginScreen').style.display = 'none';
+                        document.getElementById('app').style.display = 'block';
+                        document.getElementById('userRoleBadge').textContent = isAdmin ? 'Admin' : 'VLE';
+                        setupApp();
+                        showToast(`Welcome ${user.name}`, 'success');
+                    }
+                });
+                if (!found) {
+                    showToast('Invalid credentials', 'error');
+                }
+            } else {
+                showToast('User not found', 'error');
+            }
+        })
+        .catch(err => {
+            showLoading(false);
+            showToast('Login error', 'error');
+        });
+}
+
+// MD5 hash function (simple)
+function md5(str) {
+    // Simple MD5 implementation for demo
+    // In production, use proper crypto
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+    return hash.toString();
+}
+
+// Setup app
+function setupApp() {
+    // Show FAB for VLE
+    if (!isAdmin) {
+        document.getElementById('fabBtn').classList.add('show');
+    }
+    
+    loadStats();
+    loadApplications();
+    loadServices();
+    loadNotifications();
+    loadProfile();
+    setupRealtimeSync();
+    
+    // Auto refresh every 30s
+    setInterval(refreshData, 30000);
+}
+
+// Navigation
+function navigateTo(page) {
+    currentPage = page;
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(`page${page.charAt(0).toUpperCase() + page.slice(1)}`).classList.add('active');
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.bottom-nav .nav-item')[getNavIndex(page)].classList.add('active');
+    
+    // Hide FAB on certain pages
+    const fab = document.getElementById('fabBtn');
+    if (page === 'applications' || page === 'dashboard') {
+        fab.classList.add('show');
+    } else {
+        fab.classList.remove('show');
+    }
+    
+    // Load data on navigation
+    if (page === 'services') loadServices();
+    if (page === 'applications') loadApplications();
+    if (page === 'notifications') loadNotifications();
+    if (page === 'profile') loadProfile();
+}
+
+function getNavIndex(page) {
+    const pages = ['dashboard', 'services', 'applications', 'notifications', 'profile'];
+    return pages.indexOf(page);
+}
+
+// Load stats
+async function loadStats() {
+    try {
+        const stats = await apiCall('get_stats');
+        document.getElementById('statServices').textContent = stats.total_services || 0;
+        document.getElementById('statApplications').textContent = stats.total_applications || 0;
+        document.getElementById('statPending').textContent = stats.pending_applications || 0;
+        document.getElementById('statCollection').textContent = `₹${(stats.total_collection || 0).toFixed(2)}`;
+    } catch (e) {
+        console.error('Error loading stats:', e);
+    }
+}
+
+// Load services
+async function loadServices() {
+    try {
+        const services = await apiCall('get_services');
+        const container = document.getElementById('servicesList');
+        if (!services || Object.keys(services).length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-cogs"></i>
+                    <p>No services available</p>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        Object.entries(services).forEach(([id, service]) => {
+            html += `
+                <div class="service-card-mini">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="name">${service.serviceName || 'Unnamed'}</div>
+                            <div class="meta">${service.category || 'General'} • ${service.processingTime || '2-3 days'}</div>
+                            ${service.documents ? `<div class="meta"><i class="fas fa-file"></i> ${service.documents}</div>` : ''}
+                        </div>
+                        <div class="price">₹${service.price || 0}</div>
+                    </div>
+                    <div class="mt-1">
+                        <span class="badge-status ${service.status === 'active' ? 'badge-active' : 'badge-inactive'}">${service.status || 'active'}</span>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+        document.getElementById('serviceCount').textContent = `${Object.keys(services).length} available`;
+    } catch (e) {
+        console.error('Error loading services:', e);
+    }
+}
+
+// Load applications
+async function loadApplications() {
+    try {
+        const apps = await apiCall('get_applications');
+        const services = await apiCall('get_services');
+        
+        // Recent apps for dashboard
+        const recentContainer = document.getElementById('recentAppsList');
+        // Full list for applications page
+        const fullContainer = document.getElementById('applicationsList');
+        
+        if (!apps || Object.keys(apps).length === 0) {
+            const empty = `
+                <div class="empty-state">
+                    <i class="fas fa-file-alt"></i>
+                    <p>No applications yet</p>
+                    <button class="btn btn-primary btn-sm" onclick="showAddApplication()">Create One</button>
+                </div>
+            `;
+            if (recentContainer) recentContainer.innerHTML = empty;
+            if (fullContainer) fullContainer.innerHTML = empty;
+            return;
+        }
+        
+        const sorted = Object.entries(apps).sort((a, b) => 
+            new Date(b[1].createdAt) - new Date(a[1].createdAt)
+        );
+        
+        let html = '';
+        sorted.slice(0, 5).forEach(([id, app]) => {
+            const serviceName = services?.[app.serviceId]?.serviceName || 'Unknown';
+            const statusClass = {
+                'submitted': 'badge-pending',
+                'pending': 'badge-pending',
+                'approved': 'badge-approved',
+                'completed': 'badge-completed',
+                'rejected': 'badge-inactive'
+            }[app.status] || 'badge-pending';
+            
+            html += `
+                <div class="list-item">
+                    <div>
+                        <div class="title">${app.customerName || 'N/A'}</div>
+                        <div class="subtitle">${serviceName} • ${new Date(app.createdAt).toLocaleDateString()}</div>
+                    </div>
+                    <div>
+                        <span class="badge-status ${statusClass}">${app.status || 'draft'}</span>
+                    </div>
+                </div>
+            `;
+        });
+        
+        if (recentContainer) {
+            recentContainer.innerHTML = html || '<div class="list-item text-center text-muted">No recent applications</div>';
+        }
+        
+        // Full list
+        let fullHtml = '';
+        sorted.forEach(([id, app]) => {
+            const serviceName = services?.[app.serviceId]?.serviceName || 'Unknown';
+            const statusClass = {
+                'submitted': 'badge-pending',
+                'pending': 'badge-pending',
+                'approved': 'badge-approved',
+                'completed': 'badge-completed',
+                'rejected': 'badge-inactive'
+            }[app.status] || 'badge-pending';
+            
+            fullHtml += `
+                <div class="list-item">
+                    <div>
+                        <div class="title">${app.customerName || 'N/A'}</div>
+                        <div class="subtitle">${serviceName} • ${app.customerMobile || 'N/A'}</div>
+                        <div class="subtitle">${new Date(app.createdAt).toLocaleString()}</div>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge-status ${statusClass}">${app.status || 'draft'}</span>
+                        <div class="subtitle">${app.paymentStatus || 'pending'}</div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        if (fullContainer) {
+            fullContainer.innerHTML = fullHtml || '<div class="text-center text-muted py-4">No applications</div>';
+        }
+    } catch (e) {
+        console.error('Error loading applications:', e);
+    }
+}
+
+// Load notifications
+async function loadNotifications() {
+    try {
+        const notifs = await apiCall('get_notifications');
+        const container = document.getElementById('notificationsList');
+        
+        let count = 0;
+        if (notifs) {
+            count = Object.keys(notifs).length;
+        }
+        document.getElementById('notifBadge').textContent = count;
+        document.getElementById('notifBadgeNav').textContent = count;
+        
+        if (!notifs || Object.keys(notifs).length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-bell"></i>
+                    <p>No notifications</p>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        Object.entries(notifs).sort((a, b) => 
+            new Date(b[1].createdAt) - new Date(a[1].createdAt)
+        ).forEach(([id, notif]) => {
+            html += `
+                <div class="card">
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>${notif.title}</strong>
+                            <small class="text-muted">${new Date(notif.createdAt).toLocaleDateString()}</small>
+                        </div>
+                        <p class="mb-0 small">${notif.message}</p>
+                        ${notif.priority === 'high' ? '<span class="badge bg-danger mt-1">High Priority</span>' : ''}
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    } catch (e) {
+        console.error('Error loading notifications:', e);
+    }
+}
+
+// Load profile
+function loadProfile() {
+    if (!currentUser) return;
+    document.getElementById('profileAvatar').textContent = (currentUser.name || 'U')[0];
+    document.getElementById('profileName').textContent = currentUser.name || 'User';
+    document.getElementById('profileRole').textContent = isAdmin ? 'Admin' : 'VLE';
+    document.getElementById('profileUsername').textContent = `@${currentUser.username || 'user'}`;
+    document.getElementById('profileStatus').textContent = currentUser.status || 'Active';
+    document.getElementById('profileJoined').textContent = currentUser.createdAt || 'N/A';
+    
+    // Count applications
+    apiCall('get_applications').then(apps => {
+        if (apps) {
+            let count = 0;
+            Object.values(apps).forEach(app => {
+                if (app.vleId === currentUser.id) count++;
+            });
+            document.getElementById('profileTotalApps').textContent = count;
+        }
+    }).catch(() => {});
+}
+
+// Show add application modal
+async function showAddApplication() {
+    if (isAdmin) {
+        showToast('VLE only feature', 'warning');
+        return;
+    }
+    
+    // Load services for dropdown
+    const services = await apiCall('get_services');
+    const select = document.querySelector('#addAppForm select[name="serviceId"]');
+    if (select && services) {
+        select.innerHTML = '<option value="">Select Service...</option>';
+        Object.entries(services).forEach(([id, service]) => {
+            if (service.status !== 'inactive') {
+                select.innerHTML += `<option value="${id}">${service.serviceName} - ₹${service.price}</option>`;
+            }
+        });
+    }
+    
+    document.getElementById('addAppForm').reset();
+    new bootstrap.Modal(document.getElementById('addAppModal')).show();
+}
+
+// Submit application
+async function submitApplication() {
+    const form = document.getElementById('addAppForm');
+    const data = new FormData(form);
+    const obj = Object.fromEntries(data);
+    obj.customerId = 'cust_' + Date.now();
+    
+    try {
+        const result = await apiCall('add_application', obj);
+        if (result.success) {
+            showToast('Application submitted successfully', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('addAppModal')).hide();
+            loadApplications();
+            loadStats();
+        }
+    } catch (e) {
+        console.error('Error submitting application:', e);
+    }
+}
+
+// Logout
+function handleLogout() {
+    if (confirm('Are you sure you want to logout?')) {
+        currentUser = null;
+        document.getElementById('app').style.display = 'none';
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('loginUsername').value = '';
+        document.getElementById('loginPassword').value = '';
+        showToast('Logged out successfully', 'info');
+    }
+}
+
+// Refresh data
+function refreshData() {
+    loadStats();
+    loadApplications();
+    if (currentPage === 'services') loadServices();
+    if (currentPage === 'notifications') loadNotifications();
+    showToast('Refreshed', 'info');
+}
+
+// Real-time sync
+function setupRealtimeSync() {
+    // Applications listener
+    database.ref('applications').on('value', () => {
+        if (currentPage === 'dashboard' || currentPage === 'applications') {
+            loadApplications();
+        }
+        loadStats();
+    });
+    
+    // Services listener
+    database.ref('services').on('value', () => {
+        if (currentPage === 'services') loadServices();
+        loadStats();
+    });
+    
+    // Notifications listener
+    database.ref('notifications').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            const count = Object.keys(data).length;
+            document.getElementById('notifBadge').textContent = count;
+            document.getElementById('notifBadgeNav').textContent = count;
+            if (currentPage === 'notifications') loadNotifications();
+        }
+    });
+}
+
+// Service worker for offline support
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if already logged in via session
+    // Auto-login check would go here
+    
+    // Service worker registration
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+            .then(() => console.log('SW registered'))
+            .catch(() => console.log('SW registration failed'));
+    }
+});
+</script>
+
+</body>
+</html>
